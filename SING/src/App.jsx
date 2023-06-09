@@ -4,7 +4,8 @@ import "./App.css";
 function App() {
   return (
     <>
-      <Chart />
+      <h1>hi</h1>
+      {/* <Chart /> */}
     </>
   );
 }
