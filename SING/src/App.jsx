@@ -16,9 +16,8 @@ export default function App() {
         <Routes>
           <Route path="/chart" element={<Chart />} />
           <Route path="/artists" element={<Artists />} />
-          <Route path="/tracks" element={<Tracks />}>
-            <Route path=":track_id" element={<Lyric />} />
-          </Route>
+          <Route path="/tracks" element={<Tracks />} />
+          <Route path="/tracks/:track_id" element={<Lyric />} />
 
           <Route path="/mylists" element={<MyLists />} />
         </Routes>
