@@ -6,25 +6,30 @@ export default function Chart() {
   useEffect(() => {
     async function getChart() {
       const response = await fetch(
-        "https://api.musixmatch.com/ws/1.1/chart.tracks.get?apikey=296e4de1657cf99dd0e0883d536a592d&page=1&page_size=50&country=sg"
+        "https://api.musixmatch.com/ws/1.1/chart.tracks.get?apikey=04c537e986c14289a5ed77faf1cefcdf&page=1&page_size=50&country=sg"
       );
-      const chartData = await response.json();
+      const data = await response.json();
+      const chartData = data.message.body.track_list;
       console.log(chartData);
-      setChart(chartData.message.body.track_list);
+      setChart(chartData);
     }
     getChart();
   }, []);
 
   console.log("chart: ", chart);
+
+  const trackIdArr = chart.map((track) => track.track.track_id);
+  console.log(trackIdArr);
+
   return (
     <>
       <h1>SG TOP 50</h1>
       <table>
-        <caption>Chart 50</caption>
+        <caption></caption>
         <thead>
           <tr>
             <th>No.</th>
-            <th></th>
+            {/* <th></th> */}
             <th>Track</th>
             <th>Artist</th>
           </tr>
@@ -33,7 +38,7 @@ export default function Chart() {
           {chart.map((item, id) => (
             <tr key={id}>
               <th>{id + 1}</th>
-              <th>img</th>
+              {/* <th>img</th> */}
               <th>{item.track.track_name}</th>
               <th>{item.track.artist_name}</th>
             </tr>

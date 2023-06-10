@@ -3,8 +3,9 @@ import Chart from "./Pages/Chart";
 import NavBar from "./Components/NavBar";
 import "./App.css";
 import Artists from "./Pages/Artists";
-import Lyrics from "./Pages/Lyrics";
+import Tracks from "./Pages/Tracks";
 import MyLists from "./Pages/MyLists";
+import Lyric from "./Components/Lyric";
 
 export default function App() {
   return (
@@ -15,7 +16,10 @@ export default function App() {
         <Routes>
           <Route path="/chart" element={<Chart />} />
           <Route path="/artists" element={<Artists />} />
-          <Route path="/lyrics" element={<Lyrics />} />
+          <Route path="/tracks" element={<Tracks />}>
+            <Route path=":track_id" element={<Lyric />} />
+          </Route>
+
           <Route path="/mylists" element={<MyLists />} />
         </Routes>
       </main>

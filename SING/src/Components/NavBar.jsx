@@ -7,8 +7,8 @@ function NavBar() {
         <Link className="nav-link" to="/chart">
           Chart
         </Link>
-        <Link className="nav-link" to="/lyrics">
-          Lyrics
+        <Link className="nav-link" to="/tracks">
+          Tracks
         </Link>
         <Link className="nav-link" to="/artists">
           Artists

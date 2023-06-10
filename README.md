@@ -11,4 +11,11 @@ https://developer.musixmatch.com/
 ## Deployment
 https://sing-alpha.vercel.app/
 
+## Apps used
+* Visual Code Studio
+* React
+* Vite
+* Vercel
+* Insomnia
+
 
