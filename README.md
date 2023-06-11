@@ -17,5 +17,6 @@ https://sing-alpha.vercel.app/
 * Vite
 * Vercel
 * Insomnia
+* Airtable
 
 
