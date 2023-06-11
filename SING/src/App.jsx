@@ -18,7 +18,6 @@ export default function App() {
           <Route path="/artists" element={<Artists />} />
           <Route path="/tracks" element={<Tracks />} />
           <Route path="/tracks/:track_id" element={<Lyric />} />
-
           <Route path="/mylists" element={<MyLists />} />
         </Routes>
       </main>
