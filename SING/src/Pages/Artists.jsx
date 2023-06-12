@@ -1,16 +1,31 @@
 import { useState, useEffect } from "react";
-import Airtable from "airtable";
+import ArtistLikes from "../Components/ArtistLikes";
 
 //airtable data
 const apiKey = "keytizXwCOakHLb4x";
 const baseId = "appKdsyRVyAZYTgt2";
 const tableName = "ArtistData";
 const airtableURL = `https://api.airtable.com/v0/${baseId}/${tableName}`;
+const header = {
+  Authorization: `Bearer ${apiKey}`,
+  "Content-Type": "application/json",
+};
 
 export default function Artists() {
   const [search, setSearch] = useState("");
   const [artists, setArtists] = useState([]);
   const [myLikes, setMyLikes] = useState([]);
+
+  async function fetchArtistLikesAT() {
+    const response = await fetch(airtableURL, {
+      method: "GET",
+      headers: header,
+    });
+    const jsonData = await response.json();
+    setMyLikes(jsonData.records);
+    console.log("liked: ", myLikes);
+    console.log("liked: ", jsonData);
+  }
 
   async function getArtists() {
     const response = await fetch(
@@ -34,19 +49,7 @@ export default function Artists() {
     getArtists();
   }
 
-  // const base = new Airtable({
-  //   apiKey: apiKey,
-  // }).base(baseId);
-
-  // useEffect(() => {
-  //   base("ArtistData")
-  //     .select({ view: "Grid view" })
-  //     .eachPage((records, fetchNextPage) => {
-  //       console.log("airtable - ArtistData: ", records);
-  //       fetchNextPage();
-  //     });
-  // }, []);
-
+  //update airtable upon click
   function handleClickLike(e) {
     const artistId = parseInt(e.target.id);
     const artist = artists.find(
@@ -61,21 +64,13 @@ export default function Artists() {
     console.log("artistLikes: ", artistLikes);
 
     if (artist) {
-      setMyLikes([...myLikes, artist]);
-      console.log(myLikes);
-      //toggle
-
-      const headers = {
-        Authorization: `Bearer keytizXwCOakHLb4x`,
-        "Content-Type": "application/json",
-      };
       const postArtistData = async () => {
         await fetch(airtableURL, {
           method: "POST",
-          headers: headers,
+          headers: header,
           body: JSON.stringify({
             fields: {
-              ArtistLikes: artistLikes,
+              ArtistLikes: +1,
               ArtistName: artistName,
               ArtistId: artistId,
             },
@@ -83,8 +78,13 @@ export default function Artists() {
         });
       };
       postArtistData();
+      fetchArtistLikesAT();
     }
   }
+
+  useEffect(() => {
+    fetchArtistLikesAT();
+  }, []);
 
   return (
     <>
@@ -104,36 +104,30 @@ export default function Artists() {
           <thead>
             <tr>
               <th>Artist</th>
-              <th>Likes</th>
+              <th>Vote</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {artists.map((artist) => (
-              <tr key={artist.artist.artist_id}>
+            {artists.map((artist, id) => (
+              <tr key={id}>
                 <td>{artist.artist.artist_name}</td>
-                <td>{artist.artist.artist_rating}</td>
-                <th>
+                <td>
                   <button
                     id={artist.artist.artist_id}
                     onClick={handleClickLike}
                   >
-                    🤍
+                    ⬆
                   </button>
-                </th>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
-      {/* {myLikes > 0 && (
-        <>
-          <h1>Liked Artists</h1>
-          {myLikes.map((liked) => (
-            <div key={liked.artist.artist_id}>{liked.artist.artist_name}</div>
-          ))}
-        </>
-      )} */}
+      <ArtistLikes myLikes={myLikes} />
     </>
   );
 }
+
+

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function Chart() {
   const [chart, setChart] = useState([]);
@@ -39,7 +40,12 @@ export default function Chart() {
             <tr key={id}>
               <th>{id + 1}</th>
               {/* <th>img</th> */}
-              <th>{item.track.track_name}</th>
+
+              <th>
+                <Link to={`/tracks/${item.track.track_id}`}>
+                  {item.track.track_name}
+                </Link>
+              </th>
               <th>{item.track.artist_name}</th>
             </tr>
           ))}
