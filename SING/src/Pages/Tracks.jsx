@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function Lyrics() {
+export default function Lyrics({ musixmatchAPI }) {
   const [search, setSearch] = useState("");
   const [tracks, setTracks] = useState([]);
-  const [lyric, setLyric] = useState("");
 
   async function getTracks() {
     const response = await fetch(
-      `https://api.musixmatch.com/ws/1.1/track.search?apikey=04c537e986c14289a5ed77faf1cefcdf&q_track=${search}&page=1&page_size=100&f_has_lyrics=1&s_artist_rating=desc`
+      `https://api.musixmatch.com/ws/1.1/track.search?apikey=${musixmatchAPI}&q_track=${search}&page=1&page_size=100&f_has_lyrics=1&s_artist_rating=desc`
     );
     const data = await response.json();
     const trackData = data.message.body.track_list;
@@ -23,7 +22,7 @@ export default function Lyrics() {
 
   function handleClick() {
     console.log("search tracks");
-    // search here
+    // search query here
     getTracks();
   }
   return (

@@ -32,25 +32,3 @@ export default function ArtistLikes({ myLikes }) {
     </>
   );
 }
-{
-  /* <table>
-<thead>
-  <tr>
-    <th>Track</th>
-    <th>Artist</th>
-  </tr>
-</thead>
-<tbody>
-  {tracks.map((track) => (
-    <tr key={track.track.track_id}>
-      <td>
-        <Link to={`/tracks/${track.track.track_id}`}>
-          {track.track.track_name}
-        </Link>
-      </td>
-      <td>{track.track.artist_name}</td>
-    </tr>
-  ))}
-</tbody>
-</table> */
-}

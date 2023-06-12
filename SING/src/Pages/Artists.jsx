@@ -11,7 +11,7 @@ const header = {
   "Content-Type": "application/json",
 };
 
-export default function Artists() {
+export default function Artists({ musixmatchAPI }) {
   const [search, setSearch] = useState("");
   const [artists, setArtists] = useState([]);
   const [myLikes, setMyLikes] = useState([]);
@@ -23,13 +23,12 @@ export default function Artists() {
     });
     const jsonData = await response.json();
     setMyLikes(jsonData.records);
-    console.log("liked: ", myLikes);
     console.log("liked: ", jsonData);
   }
 
   async function getArtists() {
     const response = await fetch(
-      `https://api.musixmatch.com/ws/1.1/artist.search?apikey=f4d5ffcfb46322bbf6020445b3d741ae&q_artist=${encodeURIComponent(
+      `https://api.musixmatch.com/ws/1.1/artist.search?apikey=${musixmatchAPI}&q_artist=${encodeURIComponent(
         search
       )}&page_size=10`
     );

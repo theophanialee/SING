@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-export default function Lyric() {
+export default function Lyric({ musixmatchAPI }) {
   const [lyric, setLyric] = useState("");
   const [track, setTrack] = useState({});
   const { track_id } = useParams();
@@ -9,7 +9,7 @@ export default function Lyric() {
   useEffect(() => {
     async function getLyric() {
       const response = await fetch(
-        `https://api.musixmatch.com/ws/1.1/track.lyrics.get?apikey=04c537e986c14289a5ed77faf1cefcdf&track_id=${track_id}`
+        `https://api.musixmatch.com/ws/1.1/track.lyrics.get?apikey=${musixmatchAPI}&track_id=${track_id}`
       );
       const data = await response.json();
       const lyricData = data.message.body.lyrics.lyrics_body;
@@ -20,7 +20,7 @@ export default function Lyric() {
     async function getTrack() {
       console.log(track_id);
       const response = await fetch(
-        `https://api.musixmatch.com/ws/1.1/track.get?apikey=04c537e986c14289a5ed77faf1cefcdf&track_id=${track_id}`
+        `https://api.musixmatch.com/ws/1.1/track.get?apikey=${musixmatchAPI}&track_id=${track_id}`
       );
       const data = await response.json();
       const trackData = data.message.body.track;
