@@ -35,6 +35,7 @@ export default function Lyric() {
   function handleLike() {
     console.log("+1 like");
   }
+
   return (
     <>
       <div className="lyricPage">

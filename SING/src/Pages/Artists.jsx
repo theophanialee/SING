@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import Airtable from "airtable";
 
+//airtable data
 const apiKey = "keytizXwCOakHLb4x";
 const baseId = "appKdsyRVyAZYTgt2";
 const tableName = "ArtistData";
+const airtableURL = `https://api.airtable.com/v0/${baseId}/${tableName}`;
 
 export default function Artists() {
   const [search, setSearch] = useState("");
@@ -32,52 +34,55 @@ export default function Artists() {
     getArtists();
   }
 
-  const base = new Airtable({
-    apiKey: apiKey,
-  }).base(baseId);
+  // const base = new Airtable({
+  //   apiKey: apiKey,
+  // }).base(baseId);
 
-  useEffect(() => {
-    base("ArtistData")
-      .select({ view: "Grid view" })
-      .eachPage((records, fetchNextPage) => {
-        console.log("airtable - ArtistData: ", records);
-        fetchNextPage();
-      });
-  }, []);
+  // useEffect(() => {
+  //   base("ArtistData")
+  //     .select({ view: "Grid view" })
+  //     .eachPage((records, fetchNextPage) => {
+  //       console.log("airtable - ArtistData: ", records);
+  //       fetchNextPage();
+  //     });
+  // }, []);
 
   function handleClickLike(e) {
-    console.log("+1 like");
-    const artistId = e.target.id;
+    const artistId = parseInt(e.target.id);
     const artist = artists.find(
       (artist) => artist.artist.artist_id === artistId
     );
+    console.log(artist.artist.artist_name);
+    console.log("+1 like to", artistId);
+    const artistName = artist.artist.artist_name;
+    const artistLikes = parseInt(artist.artist.artist_rating);
+    console.log("artistId: ", artistId);
+    console.log("artistName: ", artistName);
+    console.log("artistLikes: ", artistLikes);
 
     if (artist) {
       setMyLikes([...myLikes, artist]);
+      console.log(myLikes);
+      //toggle
 
-      const url = `https://api.airtable.com/v0/${baseId}/${tableName}`;
       const headers = {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer keytizXwCOakHLb4x`,
         "Content-Type": "application/json",
       };
-
-      const requestBody = {
-        records: [
-          {
+      const postArtistData = async () => {
+        await fetch(airtableURL, {
+          method: "POST",
+          headers: headers,
+          body: JSON.stringify({
             fields: {
-              ArtistId: artist.artist.artist_id,
-              ArtistName: artist.artist.artist_name,
-              Likes: artist.artist.artist_rating,
+              ArtistLikes: artistLikes,
+              ArtistName: artistName,
+              ArtistId: artistId,
             },
-          },
-        ],
+          }),
+        });
       };
-
-      fetch(url, {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(requestBody),
-      });
+      postArtistData();
     }
   }
 
@@ -121,14 +126,14 @@ export default function Artists() {
           </tbody>
         </table>
       )}
-      {myLikes > 0 && (
+      {/* {myLikes > 0 && (
         <>
           <h1>Liked Artists</h1>
           {myLikes.map((liked) => (
             <div key={liked.artist.artist_id}>{liked.artist.artist_name}</div>
           ))}
         </>
-      )}
+      )} */}
     </>
   );
 }
