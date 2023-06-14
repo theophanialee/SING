@@ -1,28 +1,20 @@
 import { useState, useEffect } from "react";
-import ArtistLikes from "../Components/ArtistLikes";
+import ArtistVotes from "../Components/ArtistVotes";
 
-//airtable data
-const apiKey = "keytizXwCOakHLb4x";
-const baseId = "appKdsyRVyAZYTgt2";
-const tableName = "ArtistData";
-const airtableURL = `https://api.airtable.com/v0/${baseId}/${tableName}`;
-const header = {
-  Authorization: `Bearer ${apiKey}`,
-  "Content-Type": "application/json",
-};
+const airtableURL = `https://api.airtable.com/v0/appKdsyRVyAZYTgt2/ArtistData`;
 
-export default function Artists({ musixmatchAPI }) {
+export default function Artists({ musixmatchAPI, airTable }) {
   const [search, setSearch] = useState("");
   const [artists, setArtists] = useState([]);
-  const [myLikes, setMyLikes] = useState([]);
+  const [votes, setMyVotes] = useState([]);
 
   async function fetchArtistLikesAT() {
     const response = await fetch(airtableURL, {
       method: "GET",
-      headers: header,
+      headers: airTable.header,
     });
     const jsonData = await response.json();
-    setMyLikes(jsonData.records);
+    setMyVotes(jsonData.records);
     console.log("liked: ", jsonData);
   }
 
@@ -54,7 +46,6 @@ export default function Artists({ musixmatchAPI }) {
     const artist = artists.find(
       (artist) => artist.artist.artist_id === artistId
     );
-    console.log(artist.artist.artist_name);
     console.log("+1 like to", artistId);
     const artistName = artist.artist.artist_name;
     const artistLikes = parseInt(artist.artist.artist_rating);
@@ -66,7 +57,7 @@ export default function Artists({ musixmatchAPI }) {
       const postArtistData = async () => {
         await fetch(airtableURL, {
           method: "POST",
-          headers: header,
+          headers: airTable.header,
           body: JSON.stringify({
             fields: {
               ArtistLikes: +1,
@@ -81,13 +72,25 @@ export default function Artists({ musixmatchAPI }) {
     }
   }
 
+  // fetch the table again to render the Voted list, to transfer to new component
   useEffect(() => {
     fetchArtistLikesAT();
   }, []);
 
+  // // Sort the artists array based on the time added, to transfer to new component
+  // const sortedArtistsData = votes.sort((a, b) => {
+  //   const timeAddedA = new Date(a.timeAdded).getTime();
+  //   const timeAddedB = new Date(b.timeAdded).getTime();
+  //   return timeAddedB - timeAddedA;
+  // });
+
+  // console.log(sortedArtistsData);
+
+  // setArtists(sortedArtistsData);
+
   return (
     <>
-      <h1>Artists</h1>
+      <h1>Vote Artists</h1>
       <h5>
         <i>------ Vote for your favourite artists ------</i>
       </h5>
@@ -124,7 +127,7 @@ export default function Artists({ musixmatchAPI }) {
           </tbody>
         </table>
       )}
-      <ArtistLikes myLikes={myLikes} />
+      <ArtistVotes votes={votes} />
     </>
   );
 }

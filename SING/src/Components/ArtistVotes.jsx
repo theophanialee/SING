@@ -1,4 +1,4 @@
-export default function ArtistLikes({ myLikes }) {
+export default function ArtistVotes({ votes }) {
   return (
     <>
       <h1>Voting history</h1>
@@ -7,22 +7,22 @@ export default function ArtistLikes({ myLikes }) {
           <tr>
             <th>Artist</th>
             <th>Votes</th>
-            <th>Date</th>
-            <th>Time</th>
-
-            <th>User</th>
+            <th>Time Voted</th>
+            <th>Username</th>
           </tr>
         </thead>
         <tbody>
-          {myLikes.length > 0 && (
+          {votes.length > 0 && (
             <>
-              {myLikes.map((liked, id) => (
+              {votes.map((liked, id) => (
                 <tr key={id}>
                   <td>{liked.fields.ArtistName}</td>
                   <td>{liked.fields.ArtistLikes}</td>
-                  <td>{new Date(liked.createdTime).toLocaleDateString()}</td>
-                  <td>{new Date(liked.createdTime).toLocaleTimeString()}</td>
-                  <td>FAN</td>
+                  <td>
+                    {new Date(liked.createdTime).toLocaleTimeString()}{" "}
+                    {new Date(liked.createdTime).toLocaleDateString()}
+                  </td>
+                  <td>{liked.fields.by.name}</td>
                 </tr>
               ))}
             </>

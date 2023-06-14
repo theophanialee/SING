@@ -5,16 +5,16 @@ function NavBar() {
     <>
       <nav>
         <Link className="nav-link" to="/chart">
-          Chart
+          HOT!
         </Link>
         <Link className="nav-link" to="/tracks">
           Tracks
         </Link>
         <Link className="nav-link" to="/artists">
-          Artists
+          Vote Artists
         </Link>
         <Link className="nav-link" to="/mylists">
-          My List
+          My Lists
         </Link>
       </nav>
     </>

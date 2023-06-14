@@ -94,7 +94,7 @@ export default function Chart({ musixmatchAPI }) {
               </th>
 
               <th>
-                <Link to={`/tracks/${song.track.track_id}`}>
+                <Link to={`/chart/${song.track.track_id}`}>
                   {song.track.track_name}
                 </Link>
               </th>
