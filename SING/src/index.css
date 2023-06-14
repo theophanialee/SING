@@ -56,6 +56,10 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+button.clicked {
+  /* Styles when button is clicked */
+  background-color: rgb(0, 255, 34);
+}
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -69,3 +73,32 @@ button:focus-visible {
     background-color: #4f4f4f;
   }
 }
+
+
+#modal {
+  background-color: #fbff00;
+  color: #535353; 
+  position: fixed;
+  top: 200px;
+  left: 0;
+  height: 200px;
+  width: 300px;
+  z-index: 1;
+  /*This puts our modal in front of the body (which has a default z-index setting of `0`*/
+  overflow: auto;
+  /*If overflow is clipped, a scroll-bar should be added to see the rest of the content*/
+  border-radius: 5%;
+ }
+
+ .cancel {
+  margin:5%
+ }
+
+ .confirm{
+  margin:5%;
+ }
+ .confirm:hover {
+
+  background-color:rgb(255, 0, 0)
+ }
+

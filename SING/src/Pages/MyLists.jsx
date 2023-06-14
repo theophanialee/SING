@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import OneList from "../Components/OneList";
+import ModalDelete from "../Components/ModalDelete";
 
 const airtableURL = `https://api.airtable.com/v0/appKdsyRVyAZYTgt2/MyLists`;
 
@@ -19,6 +20,13 @@ export default function MyLists({ airTable, musixmatchAPI }) {
     }
     fetchMyListsAT();
   }, []);
+
+  //delete
+  const [showModal, setShowModal] = useState(false);
+
+  const handleDeleteClick = () => {
+    setShowModal(true);
+  };
 
   return (
     <>
@@ -62,6 +70,15 @@ export default function MyLists({ airTable, musixmatchAPI }) {
                     {new Date(lists.createdTime).toLocaleDateString()}{" "}
                     {new Date(lists.createdTime).toLocaleTimeString()}
                   </td>
+                  <td>
+                    <button
+                      id={lists.id}
+                      className="delete"
+                      onClick={handleDeleteClick}
+                    >
+                      ╳
+                    </button>
+                  </td>
                 </tr>
               ))}
             </>
@@ -79,6 +96,8 @@ export default function MyLists({ airTable, musixmatchAPI }) {
           </tr>
         </tbody>
       </table>
+      {showModal && <ModalDelete setShowModal={setShowModal} />}{" "}
+      {/* Render the modal component */}
     </>
   );
 }
