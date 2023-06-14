@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import AddTrackSearch from "../Components/AddTrackSearch";
 
 const airtableURL = `https://api.airtable.com/v0/appKdsyRVyAZYTgt2/MyLists`;
@@ -6,6 +7,7 @@ const airtableURL = `https://api.airtable.com/v0/appKdsyRVyAZYTgt2/MyLists`;
 export default function NewListForm({ airTable, musixmatchAPI }) {
   const [newList, setNewList] = useState({ ListName: "", TracksIdsArr: "" });
   const [addTrack, setAddTrack] = useState([]);
+  const navigate = useNavigate();
 
   function handleNameInput(e) {
     setNewList({ ...newList, ListName: e.target.value });
@@ -27,6 +29,7 @@ export default function NewListForm({ airTable, musixmatchAPI }) {
       });
     }
     createList(newList);
+    navigate("/mylists");
   }
 
   function handleAddTrackClick(e) {

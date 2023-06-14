@@ -47,7 +47,12 @@ export default function Lyric({ musixmatchAPI }) {
         </div>
         <h5 className="lyric">
           {lyric.split("\n").map((line, index) => (
-            <div key={index}>{line}</div>
+            <div key={index}>
+              {line.replace(
+                "******* This Lyrics is NOT for Commercial use *******\n(1409623484506)",
+                ""
+              )}
+            </div>
           ))}
         </h5>
       </div>

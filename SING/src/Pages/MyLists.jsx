@@ -7,6 +7,7 @@ const airtableURL = `https://api.airtable.com/v0/appKdsyRVyAZYTgt2/MyLists`;
 
 export default function MyLists({ airTable, musixmatchAPI }) {
   const [myLists, setMyLists] = useState([]);
+  const [recordId, setRecordId] = useState("");
 
   useEffect(() => {
     async function fetchMyListsAT() {
@@ -15,17 +16,27 @@ export default function MyLists({ airTable, musixmatchAPI }) {
         headers: airTable.header,
       });
       const jsonData = await response.json();
-      setMyLists(jsonData.records);
+      setMyLists((prevLists) => {
+        // Only update the state if the fetched data is different from the current state
+        if (JSON.stringify(prevLists) !== JSON.stringify(jsonData.records)) {
+          return jsonData.records;
+        }
+        return prevLists;
+      });
       console.log("lists: ", jsonData);
     }
     fetchMyListsAT();
-  }, []);
+  }, [myLists]);
+
+  console.log(myLists);
 
   //delete
   const [showModal, setShowModal] = useState(false);
+  const [deleteId, setDeleteId] = useState("");
 
-  const handleDeleteClick = () => {
+  const handleDeleteClick = (e) => {
     setShowModal(true);
+    setDeleteId(e.target.id);
   };
 
   return (
@@ -85,8 +96,6 @@ export default function MyLists({ airTable, musixmatchAPI }) {
           )}
           <tr className="newList">
             <td></td>
-            {/* <td></td> */}
-            {/* <td></td> */}
             <td>
               <Link to={`/mylists/addnewlist`}>
                 <button className="newListButton">+</button>
@@ -96,7 +105,14 @@ export default function MyLists({ airTable, musixmatchAPI }) {
           </tr>
         </tbody>
       </table>
-      {showModal && <ModalDelete setShowModal={setShowModal} />}{" "}
+      {showModal && (
+        <ModalDelete
+          setShowModal={setShowModal}
+          deleteId={deleteId}
+          airtableURL={airtableURL}
+          airTable={airTable}
+        />
+      )}{" "}
       {/* Render the modal component */}
     </>
   );

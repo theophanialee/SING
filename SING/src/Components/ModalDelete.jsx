@@ -1,12 +1,26 @@
-export default function ModalDelete({ setShowModal }) {
-  const handleCancel = () => {
+export default function ModalDelete({
+  setShowModal,
+  deleteId,
+  airtableURL,
+  airTable,
+}) {
+  function handleCancel() {
     setShowModal(false); // Close the modal when cancel is clicked
-  };
+  }
 
-  const handleConfirm = () => {
-    console.log("delete airtable data");
+  function handleConfirm() {
+    console.log("delete airtable data ", deleteId);
+    const deleteURL = `${airtableURL}/${deleteId}`;
+
+    async function deleteList() {
+      await fetch(deleteURL, {
+        method: "DELETE",
+        headers: airTable.header,
+      });
+    }
+    deleteList();
     setShowModal(false); // Close the modal after delete action is completed
-  };
+  }
 
   return (
     <>
