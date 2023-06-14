@@ -94,10 +94,10 @@ button.clicked {
   margin:5%
  }
 
- .confirm{
+ .confirm {
   margin:5%;
  }
- .confirm:hover {
+ button.confirm:hover, button.delete:hover {
 
   background-color:rgb(255, 0, 0)
  }
