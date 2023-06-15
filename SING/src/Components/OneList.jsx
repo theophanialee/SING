@@ -10,6 +10,8 @@ export default function OneList({ airTable, musixmatchAPI }) {
   const [oneList, setOneList] = useState({});
   const [trackIdsArr, setTrackIdsArr] = useState([]);
   const [listName, setListName] = useState("");
+  const [editMode, setEditMode] = useState();
+  const [newInput, setNewInput] = useState(listName);
 
   async function fetchOneListRecordAT() {
     const response = await fetch(airtableURL, {
@@ -69,18 +71,6 @@ export default function OneList({ airTable, musixmatchAPI }) {
     setTracks(tracksDataArr);
     console.log("tracks data: ", tracks);
   }
-  if (loading) {
-    return (
-      <>
-        <CircularProgress color="secondary" />
-        <CircularProgress color="success" />
-        <CircularProgress color="inherit" />
-      </>
-    );
-  }
-
-  const [editMode, setEditMode] = useState();
-  const [newInput, setNewInput] = useState(listName);
 
   function handleEditClick() {
     setEditMode(true);
@@ -91,21 +81,30 @@ export default function OneList({ airTable, musixmatchAPI }) {
     console.log(e.target.value);
   }
 
-  function handleSave(newInput) {
+  function handleSave() {
     setEditMode(false);
-    // patchOneListRecordAT();
-    // fetchOneListRecordAT();
+    handlePatchAT();
+    console.log(newInput);
   }
 
-  function patchOneListRecordAT() {
-    async function fetchOneListRecordAT() {
-      const response = await fetch(airtableURL, {
-        method: "PATCH",
-        headers: airTable.header,
-        body: JSON.stringify({ fields: { ListName: listName } }),
-      });
-    }
+  async function handlePatchAT() {
+    await fetch(airtableURL, {
+      method: "PATCH",
+      headers: airTable.header,
+      body: JSON.stringify({ fields: { ListName: newInput } }),
+    });
+      setListName(newInput);
     fetchOneListRecordAT();
+  }
+
+  if (loading) {
+    return (
+      <>
+        <CircularProgress color="secondary" />
+        <CircularProgress color="success" />
+        <CircularProgress color="inherit" />
+      </>
+    );
   }
 
   return (
@@ -119,7 +118,7 @@ export default function OneList({ airTable, musixmatchAPI }) {
               <button onClick={handleSave}>Save</button>
             </div>
           ) : (
-            <button onClick={handleEditClick}>EDIT TITLE</button>
+            <button onClick={handleEditClick}>Edit</button>
           )}
           <div>
             {lyrics.map((lyric, id) => (
