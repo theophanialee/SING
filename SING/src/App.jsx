@@ -10,7 +10,7 @@ import NewListForm from "./Pages/NewListForm";
 import OneList from "./Components/OneList";
 
 export default function App() {
-  const musixmatchAPI = "f4d5ffcfb46322bbf6020445b3d741ae";
+  const musixmatchAPI = "296e4de1657cf99dd0e0883d536a592d";
 
   const airTable = {
     apiKey: "keytizXwCOakHLb4x",
