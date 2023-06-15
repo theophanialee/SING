@@ -1,4 +1,4 @@
-import { json, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
 // import EditTitle from "./EditTitle";
@@ -93,7 +93,7 @@ export default function OneList({ airTable, musixmatchAPI }) {
       headers: airTable.header,
       body: JSON.stringify({ fields: { ListName: newInput } }),
     });
-      setListName(newInput);
+    setListName(newInput);
     fetchOneListRecordAT();
   }
 
@@ -121,9 +121,21 @@ export default function OneList({ airTable, musixmatchAPI }) {
             <button onClick={handleEditClick}>Edit</button>
           )}
           <div>
+            <h2>
+              <i>Your curated list: </i>
+            </h2>
+            <ol>
+              {tracks.map((track, id) => (
+                <li key={id}>
+                  <a href={`#track_${id + 1}`}>{track.track_name}</a>
+                </li>
+              ))}
+            </ol>
             {lyrics.map((lyric, id) => (
-              <div key={id} className="one song">
-                <h2>Track: {tracks[id].track_name}</h2>
+              <div key={id} className="one song" id={`track_${id + 1}`}>
+                <h2>
+                  Track {id + 1}: {tracks[id].track_name}
+                </h2>
                 <div className="trackDetails">
                   <div>Artist: {tracks[id].artist_name}</div>
                   <div>Album: {tracks[id].album_name}</div>
@@ -134,19 +146,16 @@ export default function OneList({ airTable, musixmatchAPI }) {
                   {" "}
                   {lyric.split("\n").map((line, index) => (
                     <div key={index}>
-                      {line
-                        .replace(
-                          "******* This Lyrics is NOT for Commercial use *******",
-                          ""
-                        )
-                        .replace("(1409623484506)", "")}
+                      {line.replace(
+                        "******* This Lyrics is NOT for Commercial use *******",
+                        ""
+                      )}
                     </div>
                   ))}
                 </div>
               </div>
             ))}
           </div>
-          {/* Render other data here */}
         </>
       )}
     </div>
