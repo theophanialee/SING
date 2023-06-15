@@ -35,7 +35,7 @@ export default function ModalUsername({
           headers: airTable.header,
           body: JSON.stringify({
             fields: {
-              ArtistLikes: artistLikes + 1, // Increment artistLikes by 1
+              ArtistLikes: +1, // Increment artistLikes by 1
               ArtistName: artistName,
               ArtistId: artistId,
               VotedBy: userInput,
