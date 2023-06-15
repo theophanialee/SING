@@ -19,15 +19,13 @@ export default function MyLists({ airTable, musixmatchAPI }) {
       headers: airTable.header,
     });
     const jsonData = await response.json();
-    setMyLists(jsonData.records);
-    // setMyLists((prevLists) => {
-    //   // Only update the state if the fetched data is different from the current state
-    //   if (JSON.stringify(prevLists) !== JSON.stringify(jsonData.records)) {
-    //     return jsonData.records;
-    //   }
-    //   return prevLists;
-    // });
-    console.log("lists: ", jsonData);
+    const sortedLists = jsonData.records.sort((a, b) => {
+      const dateA = new Date(a.fields.LastModified);
+      const dateB = new Date(b.fields.LastModified);
+      return dateB - dateA; // Sort in descending order (newest to oldest)
+    });
+    setMyLists(sortedLists);
+    console.log("lists: ", sortedLists);
   }
 
   console.log(myLists);
@@ -120,8 +118,7 @@ export default function MyLists({ airTable, musixmatchAPI }) {
           airTable={airTable}
           fetchMyListsAT={fetchMyListsAT}
         />
-      )}{" "}
-      {/* Render the modal component */}
+      )}
     </>
   );
 }
