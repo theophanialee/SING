@@ -68,7 +68,12 @@ export default function MyLists({ airTable, musixmatchAPI }) {
                       {lists.fields.ListName}{" "}
                     </Link>
                   </td>
-                  <td>{lists.fields.TracksIdsArr.split(",").length}</td>
+                  <td>
+                    {" "}
+                    {lists.fields.TracksIdsArr
+                      ? lists.fields.TracksIdsArr.split(",").length
+                      : 0}
+                  </td>
                   {/* <th>
                     <Link to={`/mylists/addtracks/${lists.id}`}>
                       <button id={lists.id}>♬</button>
