@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import ArtistVotes from "../Components/ArtistVotes";
+import ModalUsername from "../Components/ModalUsername";
 
 const airtableURL = `https://api.airtable.com/v0/appKdsyRVyAZYTgt2/ArtistData`;
 
@@ -7,6 +8,8 @@ export default function Artists({ musixmatchAPI, airTable }) {
   const [search, setSearch] = useState("");
   const [artists, setArtists] = useState([]);
   const [votes, setMyVotes] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [artistId, setArtistId] = useState(0);
 
   async function fetchArtistLikesAT() {
     const response = await fetch(airtableURL, {
@@ -40,53 +43,15 @@ export default function Artists({ musixmatchAPI, airTable }) {
     getArtists();
   }
 
-  //update airtable upon click
   function handleClickLike(e) {
+    setShowModal(true);
     const artistId = parseInt(e.target.id);
-    const artist = artists.find(
-      (artist) => artist.artist.artist_id === artistId
-    );
-    console.log("+1 like to", artistId);
-    const artistName = artist.artist.artist_name;
-    const artistLikes = parseInt(artist.artist.artist_rating);
-    console.log("artistId: ", artistId);
-    console.log("artistName: ", artistName);
-    console.log("artistLikes: ", artistLikes);
-
-    if (artist) {
-      const postArtistData = async () => {
-        await fetch(airtableURL, {
-          method: "POST",
-          headers: airTable.header,
-          body: JSON.stringify({
-            fields: {
-              ArtistLikes: +1,
-              ArtistName: artistName,
-              ArtistId: artistId,
-            },
-          }),
-        });
-      };
-      postArtistData();
-      fetchArtistLikesAT();
-    }
+    setArtistId(artistId);
   }
 
-  // fetch the table again to render the Voted list, to transfer to new component
   useEffect(() => {
     fetchArtistLikesAT();
   }, []);
-
-  // // Sort the artists array based on the time added, to transfer to new component
-  // const sortedArtistsData = votes.sort((a, b) => {
-  //   const timeAddedA = new Date(a.timeAdded).getTime();
-  //   const timeAddedB = new Date(b.timeAdded).getTime();
-  //   return timeAddedB - timeAddedA;
-  // });
-
-  // console.log(sortedArtistsData);
-
-  // setArtists(sortedArtistsData);
 
   return (
     <>
@@ -128,8 +93,16 @@ export default function Artists({ musixmatchAPI, airTable }) {
         </table>
       )}
       <ArtistVotes votes={votes} />
+      {showModal && (
+        <ModalUsername
+          setShowModal={setShowModal}
+          artistId={artistId}
+          artists={artists}
+          airtableURL={airtableURL}
+          airTable={airTable}
+          fetchArtistLikesAT={fetchArtistLikesAT}
+        />
+      )}
     </>
   );
 }
-
-

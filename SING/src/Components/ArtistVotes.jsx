@@ -22,7 +22,7 @@ export default function ArtistVotes({ votes }) {
                     {new Date(liked.createdTime).toLocaleTimeString()}{" "}
                     {new Date(liked.createdTime).toLocaleDateString()}
                   </td>
-                  <td>{liked.fields.by.name}</td>
+                  <td>{liked.fields.VotedBy}</td>
                 </tr>
               ))}
             </>
