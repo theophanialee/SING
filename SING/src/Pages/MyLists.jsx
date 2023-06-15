@@ -10,23 +10,25 @@ export default function MyLists({ airTable, musixmatchAPI }) {
   const [recordId, setRecordId] = useState("");
 
   useEffect(() => {
-    async function fetchMyListsAT() {
-      const response = await fetch(airtableURL, {
-        method: "GET",
-        headers: airTable.header,
-      });
-      const jsonData = await response.json();
-      setMyLists((prevLists) => {
-        // Only update the state if the fetched data is different from the current state
-        if (JSON.stringify(prevLists) !== JSON.stringify(jsonData.records)) {
-          return jsonData.records;
-        }
-        return prevLists;
-      });
-      console.log("lists: ", jsonData);
-    }
     fetchMyListsAT();
-  }, [myLists]);
+  }, []);
+
+  async function fetchMyListsAT() {
+    const response = await fetch(airtableURL, {
+      method: "GET",
+      headers: airTable.header,
+    });
+    const jsonData = await response.json();
+    setMyLists(jsonData.records);
+    // setMyLists((prevLists) => {
+    //   // Only update the state if the fetched data is different from the current state
+    //   if (JSON.stringify(prevLists) !== JSON.stringify(jsonData.records)) {
+    //     return jsonData.records;
+    //   }
+    //   return prevLists;
+    // });
+    console.log("lists: ", jsonData);
+  }
 
   console.log(myLists);
 
@@ -111,6 +113,7 @@ export default function MyLists({ airTable, musixmatchAPI }) {
           deleteId={deleteId}
           airtableURL={airtableURL}
           airTable={airTable}
+          fetchMyListsAT={fetchMyListsAT}
         />
       )}{" "}
       {/* Render the modal component */}

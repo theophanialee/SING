@@ -3,6 +3,7 @@ export default function ModalDelete({
   deleteId,
   airtableURL,
   airTable,
+  fetchMyListsAT,
 }) {
   function handleCancel() {
     setShowModal(false); // Close the modal when cancel is clicked
@@ -18,7 +19,9 @@ export default function ModalDelete({
         headers: airTable.header,
       });
     }
-    deleteList();
+    deleteList().then(() => {
+      fetchMyListsAT();
+    });
     setShowModal(false); // Close the modal after delete action is completed
   }
 

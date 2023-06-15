@@ -1,6 +1,7 @@
-import { useParams } from "react-router-dom";
+import { json, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
+// import EditTitle from "./EditTitle";
 
 export default function OneList({ airTable, musixmatchAPI }) {
   const { record_id } = useParams();
@@ -8,18 +9,21 @@ export default function OneList({ airTable, musixmatchAPI }) {
   console.log("recordID", record_id);
   const [oneList, setOneList] = useState({});
   const [trackIdsArr, setTrackIdsArr] = useState([]);
+  const [listName, setListName] = useState("");
+
+  async function fetchOneListRecordAT() {
+    const response = await fetch(airtableURL, {
+      method: "GET",
+      headers: airTable.header,
+    });
+    const jsonData = await response.json();
+    setOneList(jsonData);
+    console.log("one list: ", oneList);
+    setTrackIdsArr(jsonData.fields.TracksIdsArr.split(",").map(Number));
+    setListName(jsonData.fields.ListName);
+  }
 
   useEffect(() => {
-    async function fetchOneListRecordAT() {
-      const response = await fetch(airtableURL, {
-        method: "GET",
-        headers: airTable.header,
-      });
-      const jsonData = await response.json();
-      setOneList(jsonData);
-      console.log("one list: ", oneList);
-      setTrackIdsArr(jsonData.fields.TracksIdsArr.split(",").map(Number));
-    }
     fetchOneListRecordAT();
   }, []);
 
@@ -74,11 +78,49 @@ export default function OneList({ airTable, musixmatchAPI }) {
       </>
     );
   }
+
+  const [editMode, setEditMode] = useState();
+  const [newInput, setNewInput] = useState(listName);
+
+  function handleEditClick() {
+    setEditMode(true);
+  }
+
+  function handleChange(e) {
+    setNewInput(e.target.value);
+    console.log(e.target.value);
+  }
+
+  function handleSave(newInput) {
+    setEditMode(false);
+    // patchOneListRecordAT();
+    // fetchOneListRecordAT();
+  }
+
+  function patchOneListRecordAT() {
+    async function fetchOneListRecordAT() {
+      const response = await fetch(airtableURL, {
+        method: "PATCH",
+        headers: airTable.header,
+        body: JSON.stringify({ fields: { ListName: listName } }),
+      });
+    }
+    fetchOneListRecordAT();
+  }
+
   return (
     <div className="oneListPage">
       {oneList.fields && (
         <>
           <h1>* ༘˚·⋆ {oneList.fields.ListName} ⋆·˚ ༘ *</h1>
+          {editMode ? (
+            <div>
+              <input type="text" value={newInput} onChange={handleChange} />
+              <button onClick={handleSave}>Save</button>
+            </div>
+          ) : (
+            <button onClick={handleEditClick}>EDIT TITLE</button>
+          )}
           <div>
             {lyrics.map((lyric, id) => (
               <div key={id} className="one song">
